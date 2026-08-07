@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tests" type="tests" factoryName="py.test">
+    <module name="VisionGuard" />
+    <option name="_new_additionalArguments" value="" />
+    <option name="_new_target" value="$PROJECT_DIR$/tests" />
+    <option name="_new_targetType" value="PATH" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>

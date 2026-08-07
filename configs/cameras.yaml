@@ -1,0 +1,15 @@
+cameras:
+  - id: demo_warehouse
+    source: datasets/demo/demo_scene.mp4
+    backend: synthetic
+    tracker: centroid
+    enabled: false
+
+  - id: production_example
+    source: rtsp://user:password@camera.example/stream1
+    backend: yolo
+    tracker: bytetrack
+    model: models/best.pt
+    confidence: 0.35
+    device: cpu
+    enabled: false

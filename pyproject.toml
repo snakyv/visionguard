@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visionguard"
+version = "0.1.0"
+description = "Production-oriented real-time multi-camera video analytics platform"
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = {text = "MIT"}
+authors = [{name = "Vlad"}]
+dependencies = [
+  "fastapi>=0.140,<0.141",
+  "uvicorn[standard]>=0.35,<0.36",
+  "pydantic>=2.12,<3",
+  "PyYAML>=6.0,<7",
+  "numpy>=2.0,<3",
+  "opencv-python>=4.10,<5",
+  "psutil>=6.1,<8",
+]
+
+[project.optional-dependencies]
+cv = [
+  "ultralytics>=8.4,<8.5",
+  "supervision>=0.29,<0.30",
+  "trackers>=2.5,<2.6",
+  "torch>=2.4",
+  "torchvision>=0.19",
+  "openvino==2026.2.1",
+  "onnxruntime>=1.22,<2",
+  "onnx>=1.18,<2",
+  "nncf>=2.18,<3",
+]
+dev = [
+  "pytest>=8.3,<10",
+  "httpx>=0.28,<0.29",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+visionguard = "visionguard.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]

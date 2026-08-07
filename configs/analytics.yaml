@@ -1,0 +1,18 @@
+zones:
+  - name: restricted_zone
+    points:
+      - [360, 80]
+      - [610, 80]
+      - [610, 330]
+      - [360, 330]
+    classes: [person]
+    dwell_seconds: 2.0
+
+lines:
+  - name: safety_line
+    start: [315, 45]
+    end: [315, 340]
+    classes: [person, forklift, car]
+
+near_miss:
+  distance_px: 80

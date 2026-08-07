@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VisionGuard</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background:#090b10; color:#edf0f7; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at top,#151b29 0,#090b10 42%); }
+    main { width:min(1180px,92vw); margin:0 auto; padding:38px 0 70px; }
+    header { display:flex; align-items:end; justify-content:space-between; gap:20px; margin-bottom:28px; }
+    h1 { font-size:34px; margin:0; letter-spacing:-1px; }
+    .sub { color:#8d98ad; margin-top:8px; }
+    .pill { border:1px solid #273149; border-radius:999px; padding:8px 12px; color:#a8b4ca; font-size:13px; }
+    .grid { display:grid; grid-template-columns:2fr 1fr; gap:18px; }
+    .card { background:rgba(17,21,31,.86); border:1px solid #222a3b; border-radius:16px; overflow:hidden; box-shadow:0 16px 50px rgba(0,0,0,.25); }
+    .card h2 { font-size:14px; margin:0; color:#a7b0c1; text-transform:uppercase; letter-spacing:.12em; }
+    .head { padding:18px 20px; border-bottom:1px solid #222a3b; display:flex; justify-content:space-between; align-items:center; }
+    .video { aspect-ratio:16/9; background:#050609; display:grid; place-items:center; }
+    .video img { width:100%; height:100%; object-fit:cover; }
+    .events { max-height:550px; overflow:auto; }
+    .event { padding:14px 18px; border-bottom:1px solid #1d2331; }
+    .event strong { display:block; font-size:14px; margin-bottom:4px; }
+    .event span { color:#7f899b; font-size:12px; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
+    .stat { padding:15px 17px; border:1px solid #222a3b; border-radius:13px; background:rgba(17,21,31,.75); }
+    .stat b { display:block; font-size:22px; margin-top:4px; }
+    .stat small { color:#7f899b; }
+    button { background:#edf0f7; color:#0b0d12; border:0; border-radius:9px; padding:8px 12px; font-weight:700; cursor:pointer; }
+    @media(max-width:850px){ .grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}header{align-items:start;flex-direction:column} }
+  </style>
+</head>
+<body>
+<main>
+  <header><div><h1>VisionGuard</h1><div class="sub">Real-time multi-camera video analytics</div></div><div class="pill" id="health">API checking…</div></header>
+  <section class="stats"><div class="stat"><small>Camera</small><b id="camera">—</b></div><div class="stat"><small>FPS</small><b id="fps">0</b></div><div class="stat"><small>Frames</small><b id="frames">0</b></div><div class="stat"><small>Events</small><b id="eventCount">0</b></div></section>
+  <section class="grid">
+    <div class="card"><div class="head"><h2>Live analytics</h2><button id="toggle">Start demo</button></div><div class="video"><img id="stream" alt="Camera stream"></div></div>
+    <div class="card"><div class="head"><h2>Recent events</h2></div><div class="events" id="events"></div></div>
+  </section>
+</main>
+<script>
+const cameraId='demo_warehouse'; let running=false;
+async function refresh(){
+  const health=await fetch('/health').then(r=>r.json()); document.getElementById('health').textContent=`API ${health.status} · v${health.version}`;
+  const cams=await fetch('/api/v1/cameras').then(r=>r.json()); const cam=cams.find(c=>c.id===cameraId)||cams[0]; if(!cam)return;
+  running=cam.running; document.getElementById('camera').textContent=cam.id; document.getElementById('fps').textContent=cam.metrics.fps.toFixed(1); document.getElementById('frames').textContent=cam.metrics.frames; document.getElementById('eventCount').textContent=cam.metrics.events; document.getElementById('toggle').textContent=running?'Stop demo':'Start demo';
+  if(running && !document.getElementById('stream').src) document.getElementById('stream').src=`/api/v1/cameras/${cam.id}/mjpeg`;
+  const events=await fetch('/api/v1/events?limit=30').then(r=>r.json()); document.getElementById('events').innerHTML=events.map(e=>`<div class="event"><strong>${e.message}</strong><span>${new Date(e.timestamp).toLocaleTimeString()} · ${e.event_type}</span></div>`).join('')||'<div class="event"><span>No events yet</span></div>';
+}
+document.getElementById('toggle').onclick=async()=>{ await fetch(`/api/v1/cameras/${cameraId}/${running?'stop':'start'}`,{method:'POST'}); if(running){document.getElementById('stream').removeAttribute('src')} refresh(); };
+refresh(); setInterval(refresh,1000);
+</script>
+</body>
+</html>

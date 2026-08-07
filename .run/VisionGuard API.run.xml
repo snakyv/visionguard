@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="VisionGuard API" type="PythonConfigurationType" factoryName="Python">
+    <module name="VisionGuard" />
+    <option name="MODULE_MODE" value="true" />
+    <option name="MODULE_NAME" value="visionguard" />
+    <option name="PARAMETERS" value="serve" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <method v="2" />
+  </configuration>
+</component>

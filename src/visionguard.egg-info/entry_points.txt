@@ -1,0 +1,2 @@
+[console_scripts]
+visionguard = visionguard.cli:main
