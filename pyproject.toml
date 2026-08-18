@@ -9,7 +9,7 @@ description = "Production-oriented real-time multi-camera video analytics platfo
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 license = {text = "MIT"}
-authors = [{name = "Vlad"}]
+authors = [{name = "snakyv"}]
 dependencies = [
   "fastapi>=0.140,<0.141",
   "uvicorn[standard]>=0.35,<0.36",
